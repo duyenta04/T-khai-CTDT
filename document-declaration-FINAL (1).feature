@@ -1,9 +1,8 @@
 # language: vi
 @document-declaration
-Feature: Đăng ký và thay đổi thông tin sử dụng chứng từ điện tử
-  Để có thể sử dụng chứng từ điện tử hợp pháp
-  Với vai trò người nộp thuế
-  Tôi cần đăng ký hoặc thay đổi thông tin với cơ quan thuế
+Feature: Tạo mới tờ khai đăng ký/thay đổi thông tin sử dụng chứng từ điện tử
+  Với vai trò một NNT
+  Tôi muốn tạo tờ khai đăng ký/thay đổi thông tin sử dụng chứng từ điện tử với cơ quan thuế
 
   Background:
     Given người nộp thuế đã đăng nhập vào hệ thống
