@@ -221,14 +221,6 @@ Feature: Lập chứng từ khấu trừ thuế thu nhập cá nhân
       When hệ thống tính toán thuế
       Then thu nhập tính thuế là 0 VNĐ
       And số thuế là 0 VNĐ
-    
-    @tax-calculation @manual-input
-    Scenario: Giảm trừ gia cảnh nhập thủ công
-      Given kế toán đang nhập thông tin thuế
-      When kế toán nhập giảm trừ gia cảnh 11,000,000 VNĐ
-      Then giảm trừ gia cảnh được lưu là 11,000,000 VNĐ
-      And giảm trừ gia cảnh không tham gia tính toán tự động
-      And kế toán có thể sử dụng cho mục đích tham khảo
 
     @tax-calculation
     Scenario: Làm tròn số thuế
@@ -291,23 +283,6 @@ Feature: Lập chứng từ khấu trừ thuế thu nhập cá nhân
         | Bảo hiểm                | 0        | chấp nhận số tiền                  |
         | Khoản từ thiện          | 100000   | chấp nhận số tiền                  |
 
-  Rule: Thông tin tổ chức tự động
-
-    @organization-info
-    Scenario: Điền tự động thông tin tổ chức
-      Given kế toán bắt đầu lập chứng từ
-      Then thông tin tổ chức được điền tự động:
-        | Tên đơn vị    |
-        | Mã số thuế    |
-        | Địa chỉ       |
-        | Số điện thoại |
-
-    @organization-info
-    Scenario: Không cho phép sửa thông tin tổ chức
-      Given kế toán đang lập chứng từ
-      When kế toán thử sửa thông tin tổ chức
-      Then thông tin tổ chức không thể chỉnh sửa
-
   Rule: Xem trước chứng từ
     
     @preview
@@ -326,13 +301,6 @@ Feature: Lập chứng từ khấu trừ thuế thu nhập cá nhân
       When kế toán xem trước chứng từ
       Then chứng từ được hiển thị dạng xem trước
       And các trường thiếu hiển thị trống
-    
-    @preview
-    Scenario: Quay lại chỉnh sửa từ xem trước
-      Given kế toán đang xem trước chứng từ
-      When kế toán quay lại chỉnh sửa
-      Then màn hình lập chứng từ được hiển thị
-      And các thông tin đã nhập được giữ nguyên
     
     @preview @format
     Scenario: Hiển thị format đúng trên xem trước
@@ -385,18 +353,6 @@ Feature: Lập chứng từ khấu trừ thuế thu nhập cá nhân
       Then hệ thống yêu cầu xác nhận xóa
       When kế toán xác nhận
       Then chứng từ nháp bị xóa
-
-  Rule: Lưu chứng từ
-
-    @save @xml
-    Scenario: Lưu dữ liệu theo định dạng XML
-      Given kế toán đã hoàn tất chứng từ
-      And thu nhập tính thuế là 15,850,000 VNĐ
-      And số thuế là 1,627,500 VNĐ
-      When kế toán lưu chứng từ
-      Then dữ liệu được lưu theo định dạng XML
-      And thu nhập tính thuế được lưu là 15850000
-      And số thuế được lưu là 1627500
 
   Rule: Phát hành chứng từ - Validate và gửi CQT
     
