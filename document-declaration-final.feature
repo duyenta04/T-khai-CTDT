@@ -1,16 +1,15 @@
 # language: vi
 @document-declaration
-Feature: Đăng ký và thay đổi thông tin sử dụng chứng từ điện tử
-  Để có thể sử dụng chứng từ điện tử hợp pháp
-  Với vai trò người nộp thuế
-  Tôi cần đăng ký hoặc thay đổi thông tin với cơ quan thuế
+Feature: Tạo mới tờ khai đăng ký/thay đổi thông tin sử dụng chứng từ điện tử
+  Với vai trò một NNT
+  Tôi muốn tạo tờ khai đăng ký/thay đổi thông tin sử dụng chứng từ điện tử
+  Để có thể đăng ký hoặc thay đổi việc sử dụng chứng từ điện tử với cơ quan thuế
 
   Background:
     Given người nộp thuế đã đăng nhập vào hệ thống
     And người nộp thuế có quyền đăng ký phát hành chứng từ điện tử
 
   Rule: Xác định loại tờ khai
-
     @type-selection
     Scenario: Mặc định chọn "Đăng ký mới" khi chưa có đăng ký
       Given chưa có tờ khai nào được cơ quan thuế chấp nhận
@@ -36,7 +35,6 @@ Feature: Đăng ký và thay đổi thông tin sử dụng chứng từ điện 
       Then người nộp thuế chỉ có thể chọn "Thay đổi thông tin"
 
   Rule: Thông tin đơn vị tự động được điền
-
     @auto-fill
     Scenario: Hiển thị thông tin đơn vị từ hồ sơ
       When người nộp thuế mở form đăng ký
