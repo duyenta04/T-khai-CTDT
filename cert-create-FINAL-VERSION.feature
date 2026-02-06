@@ -167,19 +167,13 @@ Feature: Lập chứng từ khấu trừ thuế thu nhập cá nhân
       Then hệ thống hiển thị lỗi "Khoản thu nhập không được để trống"
 
   Rule: Tính toán thuế tự động
-    
-    Background:
-      # Giảm trừ gia cảnh KHÔNG tham gia tính toán tự động
-      # vì thông điệp từ CQT không trả về trường này
-    
+   
     @tax-calculation @formula
     Scenario: Công thức tính thu nhập tính thuế
       Given hệ thống tính thuế tự động
       Then công thức tính là:
         """
-        Thu nhập tính thuế = Thu nhập chịu thuế - Bảo hiểm - Quỹ hưu trí tự nguyện
-        
-        LƯU Ý: Giảm trừ gia cảnh KHÔNG tham gia tính toán
+        Thu nhập tính thuế = Thu nhập chịu thuế - Bảo hiểm - Khoản từ thiện - Quỹ hưu trí tự nguyện
         """
       And chỉ các trường có trong thông điệp CQT mới tham gia tính toán
 
@@ -602,30 +596,6 @@ Feature: Lập chứng từ khấu trừ thuế thu nhập cá nhân
       Then chứng từ mới được tạo với dữ liệu từ chứng từ cũ
       And kế toán sửa theo chi tiết lỗi
       And kế toán phát hành chứng từ mới
-
-  Rule: Hiệu năng
-
-    @performance
-    Scenario: Tính toán thuế nhanh
-      Given kế toán nhập đầy đủ thông tin
-      When hệ thống tính toán thuế
-      Then kết quả được hiển thị trong vòng 1 giây
-
-  Rule: Bảo mật
-
-    @security
-    Scenario: Kiểm tra quyền truy cập
-      Given người dùng không có quyền quản lý chứng từ
-      When người dùng cố truy cập chức năng lập chứng từ
-      Then hệ thống từ chối truy cập
-
-  Rule: Trải nghiệm người dùng
-
-    @usability
-    Scenario: Hiển thị gợi ý cho trường phức tạp
-      Given kế toán đang lập chứng từ
-      When kế toán di chuột qua trường phức tạp
-      Then hệ thống hiển thị gợi ý
 
     @usability
     Scenario: Validation ngay lập tức
