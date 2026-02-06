@@ -53,55 +53,6 @@ Feature: Nhập thông tin thuế thu nhập cá nhân khấu trừ
         | Số thuế                   | -1000       | hiển thị lỗi "Số tiền phải lớn hơn 0"     |
         | Bảo hiểm                  | abc         | hiển thị lỗi "Số tiền không đúng định dạng"|
 
-  Rule: Hỗ trợ tham khảo công thức tính
-
-    @calculation-guide @reference
-    Scenario: Hiển thị công thức tính thuế tham khảo
-      Given kế toán đang nhập thông tin thuế
-      When kế toán nhấn vào biểu tượng "Hướng dẫn tính" bên cạnh trường "Tổng thu nhập tính thuế"
-      Then hệ thống hiển thị công thức tham khảo:
-        """
-        Thu nhập tính thuế = Thu nhập chịu thuế - Bảo hiểm - Khoản từ thiện - Quỹ hưu trí tự nguyện
-        
-        LƯU Ý: Kế toán cần tự tính toán và nhập kết quả vào hệ thống
-        """
-
-    @calculation-guide @tax-table
-    Scenario: Hiển thị biểu thuế lũy tiến tham khảo
-      Given kế toán đang nhập thông tin thuế
-      When kế toán nhấn vào biểu tượng "Bảng thuế" bên cạnh trường "Số thuế"
-      Then hệ thống hiển thị biểu thuế TNCN lũy tiến 7 bậc:
-        | Bậc | Thu nhập tính thuế (VNĐ/tháng) | Thuế suất |
-        | 1   | Đến 5 triệu                    | 5%        |
-        | 2   | Trên 5 triệu đến 10 triệu      | 10%       |
-        | 3   | Trên 10 triệu đến 18 triệu     | 15%       |
-        | 4   | Trên 18 triệu đến 32 triệu     | 20%       |
-        | 5   | Trên 32 triệu đến 52 triệu     | 25%       |
-        | 6   | Trên 52 triệu đến 80 triệu     | 30%       |
-        | 7   | Trên 80 triệu                  | 35%       |
-
-    @calculation-guide @example
-    Scenario: Hiển thị ví dụ tính thuế
-      Given kế toán đang nhập thông tin thuế
-      When kế toán nhấn vào "Xem ví dụ tính thuế"
-      Then hệ thống hiển thị ví dụ:
-        """
-        Ví dụ:
-        - Thu nhập chịu thuế: 30,000,000 VNĐ
-        - Bảo hiểm: 3,150,000 VNĐ
-        - Khoản từ thiện: 500,000 VNĐ
-        - Quỹ hưu trí tự nguyện: 1,000,000 VNĐ
-        
-        Thu nhập tính thuế = 30,000,000 - 3,150,000 - 500,000 - 1,000,000 = 25,350,000 VNĐ
-        
-        Tính thuế theo biểu lũy tiến:
-        - 5,000,000 × 5% = 250,000
-        - 5,000,000 × 10% = 500,000
-        - 8,000,000 × 15% = 1,200,000
-        - 7,350,000 × 20% = 1,470,000
-        
-        Tổng số thuế = 3,420,000 VNĐ
-        """
 
   Rule: Nhập thông tin cho nhiều tháng
 
@@ -115,34 +66,6 @@ Feature: Nhập thông tin thuế thu nhập cá nhân khấu trừ
       And kế toán nhập các thông tin thu nhập và thuế
       Then thông tin được áp dụng cho cả 12 tháng từ 1/2025 đến 12/2025
 
-    @multi-month @display
-    Scenario: Hiển thị thông tin theo tháng
-      Given chứng từ có thông tin thuế từ tháng 1 đến tháng 12 năm 2025
-      When kế toán xem chi tiết chứng từ
-      Then hệ thống hiển thị thông tin theo từng tháng:
-        | Tháng | Thu nhập chịu thuế | Bảo hiểm  | Thu nhập tính thuế | Số thuế   |
-        | 1/25  | 30,000,000        | 3,150,000 | 26,850,000        | 3,827,500 |
-        | 2/25  | 30,000,000        | 3,150,000 | 26,850,000        | 3,827,500 |
-        | ...   | ...               | ...       | ...               | ...       |
-        | 12/25 | 30,000,000        | 3,150,000 | 26,850,000        | 3,827,500 |
-
-  Rule: Sao chép thông tin từ tháng trước
-
-    @copy @convenience
-    Scenario: Sao chép thông tin khoản thu nhập từ chứng từ trước
-      Given đã có chứng từ tháng 11/2025 với thông tin thuế
-      When kế toán lập chứng từ mới cho tháng 12/2025
-      And kế toán chọn "Sao chép từ chứng từ trước"
-      Then hệ thống điền sẵn thông tin từ chứng từ tháng 11/2025
-      And kế toán có thể chỉnh sửa các thông tin đã được điền
-
-    @copy @reference
-    Scenario: Xem thông tin tháng trước để tham khảo
-      Given kế toán đang lập chứng từ mới
-      When kế toán nhấn "Xem chứng từ tháng trước"
-      Then hệ thống hiển thị chứng từ gần nhất đã lập
-      And kế toán có thể tham khảo các số liệu để nhập
-
   Rule: Kiểm tra tính hợp lý của dữ liệu
 
     @validation @logic
@@ -153,34 +76,23 @@ Feature: Nhập thông tin thuế thu nhập cá nhân khấu trừ
       Then hệ thống hiển thị cảnh báo "Thu nhập tính thuế không nên lớn hơn thu nhập chịu thuế"
       And cho phép kế toán tiếp tục nếu chắc chắn
 
-    @validation @logic
-    Scenario: Cảnh báo khi số thuế quá cao so với thu nhập tính thuế
-      Given kế toán đang nhập thông tin thuế
-      And "Tổng thu nhập tính thuế" là 25,000,000 VNĐ
-      When kế toán nhập "Số thuế" là 10,000,000 VNĐ
-      Then hệ thống hiển thị cảnh báo "Số thuế cao bất thường (>35% thu nhập tính thuế)"
-      And yêu cầu kế toán kiểm tra lại
-
-    @validation @logic
-    Scenario: Cảnh báo khi tổng các khoản khấu trừ lớn hơn thu nhập chịu thuế
-      Given kế toán đang nhập thông tin thuế
-      And "Tổng thu nhập chịu thuế" là 10,000,000 VNĐ
-      When kế toán nhập:
-        | Bảo hiểm              | 8,000,000 |
-        | Khoản từ thiện        | 3,000,000 |
-        | Quỹ hưu trí tự nguyện | 1,000,000 |
-      Then hệ thống hiển thị cảnh báo "Tổng các khoản khấu trừ (12,000,000 VNĐ) lớn hơn thu nhập chịu thuế"
-      And gợi ý "Thu nhập tính thuế nên là 0 VNĐ"
-
-  Rule: Lưu và chỉnh sửa thông tin
+  Rule: Lưu nháp
 
     @save @draft
     Scenario: Lưu nháp khi chưa nhập đủ thông tin
       Given kế toán đang nhập thông tin thuế
       And một số trường bắt buộc chưa được nhập
-      When kế toán chọn "Lưu nháp"
+      When kế toán chọn "Ghi tạm"
       Then chứng từ được lưu với trạng thái "Nháp"
-      And kế toán có thể quay lại tiếp tục nhập sau
+      And kế toán có thể quay lại tiếp tục chỉnh sửa
+
+   Rule: Xem trước chứng từ
+
+    @preview @display
+    Scenario: Xem trước chứng từ trước khi phát hành
+      Given kế toán đã nhập đầy đủ thông tin thuế
+      When kế toán chọn "Xem trước"
+      Then hệ thống hiển thị bản xem trước chứng từ theo mẫu mặc định của năm hiện tại
 
     @save @validate
     Scenario: Kiểm tra đầy đủ thông tin khi phát hành
@@ -190,9 +102,3 @@ Feature: Nhập thông tin thuế thu nhập cá nhân khấu trừ
       Then hệ thống hiển thị danh sách các trường cần bổ sung
       And không cho phép phát hành
 
-    @edit @correction
-    Scenario: Sửa thông tin khi phát hiện sai sót
-      Given chứng từ có trạng thái "Nháp"
-      When kế toán sửa "Số thuế" từ 3,827,500 thành 3,602,500
-      And kế toán lưu chứng từ
-      Then thông tin "Số thuế" được cập nhật thành 3,602,500 VNĐ
